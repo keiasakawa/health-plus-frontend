@@ -17,6 +17,11 @@ import { BsPersonCircle } from "react-icons/bs";
 const LoginPage: React.FC = () => {
   return (
     <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle class="ion-text-center">Health +</IonTitle>
+        </IonToolbar>
+      </IonHeader>
       <IonContent fullscreen>
         <IonRow>
           <IonCol class="ion-text-center">
