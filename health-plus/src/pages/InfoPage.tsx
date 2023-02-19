@@ -26,7 +26,7 @@ import {
         </IonHeader>
         <IonContent fullscreen>
         <IonText class = "ion-text-center"><h1>Before we start, let's get some info!</h1></IonText>
-          <IonText><h4 className="height-text">Height</h4></IonText>
+          {/* <IonText><h4 className="height-text">Height</h4></IonText>
           <IonItem lines="full">
             <IonLabel>Feet</IonLabel>
             <IonInput type="number" required></IonInput>
@@ -48,7 +48,7 @@ import {
                     Non-binary
                 </IonSelectOption>
             </IonSelect>
-          </IonItem>
+          </IonItem> */}
           <IonItem className="fitness-goal-component" lines="full">
             <IonLabel>What is your goal? (This can be changed at anytime)</IonLabel>
             <IonSelect>
