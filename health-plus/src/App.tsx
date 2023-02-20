@@ -10,10 +10,10 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { star, search, ellipsisHorizontal } from 'ionicons/icons';
 import RecommendationTab from './pages/recommendation/RecommendationTab';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import Search from './pages/search/Search';
+import EditProfile from './pages/editprofile/EditProfile';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import InfoPage from './pages/InfoPage';
@@ -42,14 +42,16 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
+      <IonTabs>
+        <IonRouterOutlet>
           <Route exact path="/recommendations">
             <RecommendationTab />
           </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
+          <Route exact path="/search">
+            <Search />
           </Route>
-          <Route path="/tab3">
-            <Tab3 />
+          <Route path="/editprofile">
+            <EditProfile />
           </Route>
           <Route exact path="/">
             <Redirect to="/login" />
@@ -63,6 +65,22 @@ const App: React.FC = () => (
           <Route exact path="/info">
             <InfoPage />
           </Route>
+        </IonRouterOutlet>
+        <IonTabBar slot="bottom">
+          <IonTabButton tab="recommendations" href="/recommendations">
+            <IonIcon icon={star} />
+            <IonLabel>Recommendations</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="search" href="/search">
+            <IonIcon icon={search} />
+            <IonLabel>Search</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="editprofile" href="/editprofile">
+            <IonIcon icon={ellipsisHorizontal} />
+            <IonLabel>Edit Profile</IonLabel>
+          </IonTabButton>
+        </IonTabBar>
+        </IonTabs>
     </IonReactRouter>
   </IonApp>
 );

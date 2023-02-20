@@ -1,0 +1,9 @@
+.alert-checkbox-label.sc-ion-alert-md{
+        white-space: normal !important;
+  }
+
+  .alert-tappable.sc-ion-alert-md{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    line-height: 1;
+  }
