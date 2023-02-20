@@ -11,10 +11,37 @@ import {
   IonButton,
   IonLabel,
   IonInput,
+  IonText,
 } from "@ionic/react";
+import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
 import { BsPersonCircle } from "react-icons/bs";
+import {instance} from '../utils'
 
 const LoginPage: React.FC = () => {
+  const [message, setMessage] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+
+  const handleSignIn = async() => {
+    const loginData = {
+      email: email,
+      password: password,
+    };
+    try {
+      await instance.get('users/login', { params: loginData});
+      setMessage('');
+      <Link to="/recommendations" />
+    }
+    catch (err){
+      if (err instanceof Error) {
+        setMessage(err.message);
+        console.log(err.message)
+      }
+    }
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -30,15 +57,20 @@ const LoginPage: React.FC = () => {
         </IonRow>
         <IonItem lines="full">
           <IonLabel position="floating">Email</IonLabel>
-          <IonInput type="text" required></IonInput>
+          <IonInput type="email" required value={email} onIonChange={(e) => setEmail(e.detail.value!)}></IonInput>
         </IonItem>
         <IonItem lines="full">
           <IonLabel position="floating">Password</IonLabel>
-          <IonInput type="password" required></IonInput>
+          <IonInput type="password" required value={password} onIonChange={(e) => setPassword(e.detail.value!)}></IonInput>
         </IonItem>
         <IonRow>
+          <IonText>
+            {message}
+          </IonText>
+        </IonRow>
+        <IonRow>
           <IonCol>
-            <IonButton type="submit" color="danger" expand="block">
+            <IonButton type="submit" color="danger" expand="block" onClick={handleSignIn}>
               Sign In
             </IonButton>
           </IonCol>

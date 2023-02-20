@@ -15,7 +15,7 @@ const TabBar: React.FC = () => {
     <IonTabs>
       <IonRouterOutlet></IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
+          <IonTabButton tab="recommendations" href="/recommendations">
             <IonIcon icon={triangle} />
             <IonLabel>Tab 1</IonLabel>
           </IonTabButton>

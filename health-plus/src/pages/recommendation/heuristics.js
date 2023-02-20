@@ -6,7 +6,7 @@ import { instance } from '../../utils'
 // We calculate the recommended meals and return the top 10
 const RecommendedMeal = (id) => {
 
-    const [profile, setProfile] = useState(null)
+    {/* const [profile, setProfile] = useState(null)
     const [health, setHealth ] = useState(null)
 
     const getProfile = async() => {
@@ -29,8 +29,8 @@ const RecommendedMeal = (id) => {
         }
     }
 
-    getProfile();
-    getHealth();
+    // getProfile();
+    // getHealth();
     let bmr;
     if (profile.gender === "male") {
         bmr = 66.5 + (13.75 * (profile.weight / 2.2)) + (5 * (profile.height * 2.54)) - (6.75 * profile.age) 
@@ -60,8 +60,9 @@ const RecommendedMeal = (id) => {
 
     let fats = (calories * .28) / 9
 
-    // TODO: Get first 10 meals with this information. Lets aim for +/- 100 calories and for the rest of the macros, lets do +/- 5
-    return;
+    // TODO: Get first 10 meals with this information. Lets aim for +/- 100 calories and for the rest of the macros, lets do +/- 5 
+*/}
+    return [{image: 'https://www.allrecipes.com/thmb/mKY06P7OC1BDREL8DoSNxCK2vAo=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/2295590-Best-Ever-Meatloaf-ddmfs-083-4x3-1-6d7604c8b4204abd832a26ef85d0e58e.jpg', name: 'Best Ever Meat Loaf', protein: 28, carbs: 22, fats: 23, cals: 410, description: 'This best ever meatloaf recipe lives up to its name and is my favorite I have found. Try it and you will see.'}];
 }
 
 export default RecommendedMeal;
