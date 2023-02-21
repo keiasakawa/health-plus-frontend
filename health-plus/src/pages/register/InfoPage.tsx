@@ -15,8 +15,13 @@ import {
     IonSelectOption,
   } from "@ionic/react";
   import './InfoPage.css'
+  import { useHistory } from 'react-router-dom';
   
   const InfoPage: React.FC = () => {
+    const history = useHistory();
+    const handleInfo = () => {
+      history.push('/recommendations')
+    }
     return (
       <IonPage>
         <IonHeader>
@@ -63,9 +68,38 @@ import {
                 </IonSelectOption>
             </IonSelect>
           </IonItem>
+          <IonItem className="allergies-component" lines="full">
+            <IonLabel>What are your allergies? (This can be changed at anytime)</IonLabel>
+            <IonSelect className="my-select" multiple={true}>
+                <IonSelectOption>
+                    Milk
+                </IonSelectOption>
+                <IonSelectOption>
+                    Eggs
+                </IonSelectOption>
+                <IonSelectOption>
+                    Fish (e.g., bass, flounder, cod)
+                </IonSelectOption>
+                <IonSelectOption>
+                    Wheat
+                </IonSelectOption>
+                <IonSelectOption>
+                  Crustacean shellfish (e.g., crab, lobster, shrimp)
+                </IonSelectOption>
+                <IonSelectOption>
+                  Tree nuts (e.g., almonds, walnuts, pecans)
+                </IonSelectOption>
+                <IonSelectOption>
+                    Peanuts
+                </IonSelectOption>
+                <IonSelectOption>
+                    Soybeans
+                </IonSelectOption>
+            </IonSelect>
+          </IonItem>
           <IonRow>
             <IonCol>
-              <IonButton type="submit" color="danger" expand="block">
+              <IonButton type="submit" color="danger" expand="block" onClick={handleInfo}>
                 Next
               </IonButton>
             </IonCol>

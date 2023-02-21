@@ -2,6 +2,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardH
 import ExploreContainer from '../../components/ExploreContainer';
 import './RecommendationTab.css';
 import RecommendedMeal from './heuristics'
+import Header from '../../components/Header'
 import { HealthKit, HealthKitOptions } from '@awesome-cordova-plugins/health-kit'
 
 const RecommendationTab: React.FC = () => {
@@ -31,7 +32,7 @@ const RecommendationTab: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+          <Header />
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

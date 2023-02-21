@@ -13,18 +13,24 @@ import {
   IonInput,
   IonText,
 } from "@ionic/react";
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import React, { useState } from 'react'
 import { BsPersonCircle } from "react-icons/bs";
-import {instance} from '../utils'
+import {instance} from '../../utils'
 
 const LoginPage: React.FC = () => {
   const [message, setMessage] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const history = useHistory();
 
 
   const handleSignIn = async() => {
+    if (email === '' || password === '') {
+      setMessage('Please enter email/password');
+      return;
+    }
+
     const loginData = {
       email: email,
       password: password,
@@ -32,7 +38,7 @@ const LoginPage: React.FC = () => {
     try {
       await instance.get('users/login', { params: loginData});
       setMessage('');
-      <Link to="/recommendations" />
+      history.push('/recommendations')
     }
     catch (err){
       if (err instanceof Error) {
@@ -73,6 +79,11 @@ const LoginPage: React.FC = () => {
             <IonButton type="submit" color="danger" expand="block" onClick={handleSignIn}>
               Sign In
             </IonButton>
+          </IonCol>
+        </IonRow>
+        <IonRow class="ion-align-items-center">
+          <IonCol class="ion-text-center">
+            <IonButton href='/register'>Don't have an account?</IonButton>
           </IonCol>
         </IonRow>
       </IonContent>

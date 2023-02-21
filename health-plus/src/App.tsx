@@ -14,9 +14,10 @@ import { star, search, ellipsisHorizontal } from 'ionicons/icons';
 import RecommendationTab from './pages/recommendation/RecommendationTab';
 import Search from './pages/search/Search';
 import EditProfile from './pages/editprofile/EditProfile';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import InfoPage from './pages/InfoPage';
+import LoginPage from './pages/login/LoginPage';
+import RegisterPage from './pages/register/RegisterPage';
+import InfoPage from './pages/register/InfoPage';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';

@@ -1,12 +1,13 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonSelect, IonSelectOption, IonRow, IonButton, IonCol } from '@ionic/react';
 import './EditProfile.css';
+import Header from '../../components/Header'
 
 const EditProfile: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 3</IonTitle>
+          <Header />
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
