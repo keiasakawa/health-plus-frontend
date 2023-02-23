@@ -44,8 +44,10 @@ const LoginPage: React.FC = () => {
       email: email,
       password: password,
     };
+
     try {
-      await instance.get('users/login', { params: loginData});
+      console.log(loginData)
+      await instance.post('users/login', loginData);
       setMessage('');
       history.push('/recommendations')
     }
