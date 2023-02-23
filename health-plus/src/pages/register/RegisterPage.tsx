@@ -13,12 +13,23 @@ import {
     IonLabel,
     IonInput,
     IonText,
+    useIonViewWillEnter
   } from "@ionic/react";
   import {useState} from 'react'
   import {instance} from '../../utils'
   import { useHistory } from 'react-router-dom';
+
+  export function hideTabs() {
+    const tabsEl = document.querySelector('ion-tab-bar');
+    if (tabsEl) {
+      tabsEl.hidden = true;
+    }
+  }
   
   const RegisterPage: React.FC = () => {
+
+    useIonViewWillEnter(() => hideTabs())
+
     const [message, setMessage] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');

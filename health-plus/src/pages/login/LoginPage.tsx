@@ -12,13 +12,22 @@ import {
   IonLabel,
   IonInput,
   IonText,
+  useIonViewWillEnter
 } from "@ionic/react";
 import { useHistory } from 'react-router-dom';
 import React, { useState } from 'react'
 import { BsPersonCircle } from "react-icons/bs";
 import {instance} from '../../utils'
 
+export function hideTabs() {
+  const tabsEl = document.querySelector('ion-tab-bar');
+  if (tabsEl) {
+    tabsEl.hidden = true;
+  }
+}
+
 const LoginPage: React.FC = () => {
+  useIonViewWillEnter(() => hideTabs())
   const [message, setMessage] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

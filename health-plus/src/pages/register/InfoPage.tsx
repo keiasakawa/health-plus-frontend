@@ -13,11 +13,21 @@ import {
     IonInput,
     IonSelect,
     IonSelectOption,
+    useIonViewWillEnter
   } from "@ionic/react";
   import './InfoPage.css'
   import { useHistory } from 'react-router-dom';
+
+  export function hideTabs() {
+    const tabsEl = document.querySelector('ion-tab-bar');
+    if (tabsEl) {
+      tabsEl.hidden = true;
+    }
+  }
   
   const InfoPage: React.FC = () => {
+    useIonViewWillEnter(() => hideTabs())
+    
     const history = useHistory();
     const handleInfo = () => {
       history.push('/recommendations')
