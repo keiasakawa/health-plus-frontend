@@ -46,7 +46,6 @@ const LoginPage: React.FC = () => {
     };
 
     try {
-      console.log(loginData)
       await instance.post('users/login', loginData);
       setMessage('');
       history.push('/recommendations')

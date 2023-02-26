@@ -1,17 +1,58 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonSelect, IonSelectOption, IonRow, IonButton, IonCol, IonInput } from '@ionic/react';
 import './EditProfile.css';
 import Header from '../../components/Header'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {instance} from '../../utils'
 
 const EditProfile: React.FC = () => {
   const [goal, setGoal] = useState('')
   const [allergies, setAllergies] = useState([])
-  const [disabled, setDisabled] = useState(true)
   const [weight, setWeight] = useState('')
 
-  const handleInfo = () => {
-      
+  const values = { 'Milk': false, 'Eggs': false, 'Fish (e.g., bass, flounder, cod)': false,
+  'Wheat': false, ' Crustacean shellfish (e.g., crab, lobster, shrimp)': false, 'Tree nuts (e.g., almonds, walnuts, pecans)': false, 'Peanuts': false, 'Soybeans': false
+}
+  const select = new Map<string, boolean>(Object.entries(values))
+
+  const id = localStorage.getItem('id')
+
+  const getInfo = async() => {
+    try {
+      const res = await instance.get('users/info', {params: id})
+      setGoal(res.data.goal)
+      setAllergies(res.data.allergies)
+      res.data.allergies.forEach(function(s: string) {
+        select.set(s, true)
+      })
+      setWeight(res.data.weight)
+    }
+    catch (err){
+      if (err instanceof Error) {
+        console.log(err.message)
+      }
+    
   }
+}
+
+  const handleInfo = async() => {
+    const infoData = {
+      goal: goal,
+      weight: weight,
+      allergies: allergies,
+    };
+    try {
+      await instance.post('users/info', { params: id, data: infoData});
+    }
+    catch (err){
+      if (err instanceof Error) {
+        console.log(err.message)
+      }
+    }
+  }
+
+  useEffect(() => {
+    getInfo();
+  }, []);
 
   return (
     <IonPage>
@@ -43,30 +84,14 @@ const EditProfile: React.FC = () => {
           <IonItem className="allergies-component" lines="full">
             <IonLabel>Allergies</IonLabel>
             <IonSelect className="my-select" multiple={true} onIonChange={e => setAllergies(e.detail.value)}>
-                <IonSelectOption>
-                    Milk
-                </IonSelectOption>
-                <IonSelectOption>
-                    Eggs
-                </IonSelectOption>
-                <IonSelectOption>
-                    Fish (e.g., bass, flounder, cod)
-                </IonSelectOption>
-                <IonSelectOption>
-                    Wheat
-                </IonSelectOption>
-                <IonSelectOption>
-                  Crustacean shellfish (e.g., crab, lobster, shrimp)
-                </IonSelectOption>
-                <IonSelectOption>
-                  Tree nuts (e.g., almonds, walnuts, pecans)
-                </IonSelectOption>
-                <IonSelectOption>
-                    Peanuts
-                </IonSelectOption>
-                <IonSelectOption>
-                    Soybeans
-                </IonSelectOption>
+              {Object.keys(select).map(function(key, index) {
+                const props = {
+                  selected: select.get(key)
+                }
+                return(
+                <IonSelectOption {...props}>{key}</IonSelectOption>
+                )
+              })}
             </IonSelect>
           </IonItem>
           <IonRow>

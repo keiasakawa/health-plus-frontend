@@ -18,6 +18,7 @@ import {
   import { useState, useEffect } from 'react';
   import './InfoPage.css'
   import { useHistory } from 'react-router-dom';
+  import {instance} from '../../utils'
 
   export function hideTabs() {
     const tabsEl = document.querySelector('ion-tab-bar');
@@ -35,13 +36,28 @@ import {
     const [weight, setWeight] = useState('')
     
     const history = useHistory();
-    const handleInfo = () => {
-      
-      history.push('/recommendations')
+    const handleInfo = async() => 
+    {
+      const infoData = {
+        id: localStorage.getItem('id'),
+        goal: goal,
+        weight: weight,
+        allergies: allergies,
+      };
+      try {
+        await instance.post('users/info', infoData);
+        window.location.replace('/recommendations')
+      }
+      catch (err){
+        if (err instanceof Error) {
+          console.log(err.message)
+        }
+      }
     }
 
     useEffect(() => {
-      setDisabled(goal === '' && weight === '')
+      console.log(weight)
+      setDisabled(goal === '' || weight === '')
     }, [goal, weight]);
 
     return (

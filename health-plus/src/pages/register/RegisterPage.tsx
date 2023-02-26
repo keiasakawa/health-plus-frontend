@@ -48,7 +48,7 @@ import {
         password: password,
       };
       try {
-        await instance.post('users/register', { params: registerData });
+        await instance.post('users/register', registerData);
         localStorage.setItem('id', registerData.id)
         history.push('/info')
       }
