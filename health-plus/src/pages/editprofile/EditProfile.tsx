@@ -1,8 +1,18 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonSelect, IonSelectOption, IonRow, IonButton, IonCol } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonSelect, IonSelectOption, IonRow, IonButton, IonCol, IonInput } from '@ionic/react';
 import './EditProfile.css';
 import Header from '../../components/Header'
+import { useState } from 'react';
 
 const EditProfile: React.FC = () => {
+  const [goal, setGoal] = useState('')
+  const [allergies, setAllergies] = useState([])
+  const [disabled, setDisabled] = useState(true)
+  const [weight, setWeight] = useState('')
+
+  const handleInfo = () => {
+      
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -13,7 +23,7 @@ const EditProfile: React.FC = () => {
       <IonContent fullscreen>
         <IonItem className="fitness-goal-component" lines="full">
             <IonLabel>Goal</IonLabel>
-            <IonSelect>
+            <IonSelect onIonChange={e => setGoal(e.detail.value)}>
                 <IonSelectOption>
                     Lose Weight
                 </IonSelectOption>
@@ -25,9 +35,14 @@ const EditProfile: React.FC = () => {
                 </IonSelectOption>
             </IonSelect>
           </IonItem>
+          <IonItem className="weight-component">
+            <IonLabel position="stacked">What is your weight? (In pounds)</IonLabel>
+            <IonInput type="number" value={weight} onIonChange={e => setWeight(e.detail.value!)}>
+            </IonInput>
+          </IonItem>
           <IonItem className="allergies-component" lines="full">
             <IonLabel>Allergies</IonLabel>
-            <IonSelect className="my-select" multiple={true}>
+            <IonSelect className="my-select" multiple={true} onIonChange={e => setAllergies(e.detail.value)}>
                 <IonSelectOption>
                     Milk
                 </IonSelectOption>

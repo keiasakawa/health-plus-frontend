@@ -13,11 +13,13 @@ import {
     IonLabel,
     IonInput,
     IonText,
-    useIonViewWillEnter
+    useIonViewWillEnter,
+    IonNote
   } from "@ionic/react";
   import {useState} from 'react'
   import {instance} from '../../utils'
   import { useHistory } from 'react-router-dom';
+  const {v4: uuidv4} = require('uuid');
 
   export function hideTabs() {
     const tabsEl = document.querySelector('ion-tab-bar');
@@ -41,11 +43,13 @@ import {
         return;
       }
       const registerData = {
+        id: uuidv4(),
         email: email,
         password: password,
       };
       try {
-        await instance.post('users/register', { params: registerData});
+        await instance.post('users/register', { params: registerData });
+        localStorage.setItem('id', registerData.id)
         history.push('/info')
       }
       catch (err){
@@ -67,6 +71,8 @@ import {
           <IonItem lines="full">
             <IonLabel position="floating">Email</IonLabel>
             <IonInput type="email" required value={email} onIonChange={(e) => setEmail(e.detail.value!)}></IonInput>
+            <IonNote slot="helper">Enter a valid email</IonNote>
+            <IonNote slot="error">Invalid email</IonNote>
           </IonItem>
           <IonItem lines="full">
             <IonLabel position="floating">Password</IonLabel>
