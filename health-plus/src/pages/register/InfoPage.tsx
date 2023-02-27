@@ -35,7 +35,6 @@ import {
     const [disabled, setDisabled] = useState(true)
     const [weight, setWeight] = useState('')
     
-    const history = useHistory();
     const handleInfo = async() => 
     {
       const infoData = {

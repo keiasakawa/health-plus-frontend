@@ -9,28 +9,28 @@ const EditProfile: React.FC = () => {
   const [allergies, setAllergies] = useState([])
   const [weight, setWeight] = useState('')
 
-  const values = { 'Milk': false, 'Eggs': false, 'Fish (e.g., bass, flounder, cod)': false,
-  'Wheat': false, ' Crustacean shellfish (e.g., crab, lobster, shrimp)': false, 'Tree nuts (e.g., almonds, walnuts, pecans)': false, 'Peanuts': false, 'Soybeans': false
-}
-  const select = new Map<string, boolean>(Object.entries(values))
-
-  const id = localStorage.getItem('id')
+//   const values = { 'Milk': false, 'Eggs': false, 'Fish (e.g., bass, flounder, cod)': false,
+//   'Wheat': false, ' Crustacean shellfish (e.g., crab, lobster, shrimp)': false, 'Tree nuts (e.g., almonds, walnuts, pecans)': false, 'Peanuts': false, 'Soybeans': false
+// }
+//   const select = new Map<string, boolean>(Object.entries(values))
 
   const getInfo = async() => {
     try {
-      const res = await instance.get('users/info', {params: id})
-      setGoal(res.data.goal)
-      setAllergies(res.data.allergies)
-      res.data.allergies.forEach(function(s: string) {
-        select.set(s, true)
-      })
-      setWeight(res.data.weight)
+      const id = localStorage.getItem('id')
+      let res = await instance.get(`users/info/${id}`)
+      console.log(res)
+      setGoal(res.data[0].fitness_goal)
+      setAllergies(res.data[0].allergies)
+      setWeight(res.data[0].weight)
+      console.log(goal)
+      console.log(weight)
+      console.log(allergies)
+
     }
     catch (err){
       if (err instanceof Error) {
         console.log(err.message)
       }
-    
   }
 }
 
@@ -41,7 +41,8 @@ const EditProfile: React.FC = () => {
       allergies: allergies,
     };
     try {
-      await instance.post('users/info', { params: id, data: infoData});
+      console.log(infoData)
+      await instance.put(`users/info/${localStorage.getItem('id')}`, infoData);
     }
     catch (err){
       if (err instanceof Error) {
@@ -51,6 +52,7 @@ const EditProfile: React.FC = () => {
   }
 
   useEffect(() => {
+    console.log('L')
     getInfo();
   }, []);
 
@@ -64,7 +66,7 @@ const EditProfile: React.FC = () => {
       <IonContent fullscreen>
         <IonItem className="fitness-goal-component" lines="full">
             <IonLabel>Goal</IonLabel>
-            <IonSelect onIonChange={e => setGoal(e.detail.value)}>
+            <IonSelect value={goal} onIonChange={e => setGoal(e.detail.value)}>
                 <IonSelectOption>
                     Lose Weight
                 </IonSelectOption>
@@ -83,20 +85,45 @@ const EditProfile: React.FC = () => {
           </IonItem>
           <IonItem className="allergies-component" lines="full">
             <IonLabel>Allergies</IonLabel>
-            <IonSelect className="my-select" multiple={true} onIonChange={e => setAllergies(e.detail.value)}>
-              {Object.keys(select).map(function(key, index) {
+            <IonSelect className="my-select" multiple={true} value={allergies} onIonChange={e => setAllergies(e.detail.value)}>
+              {/* {Object.keys(select).map(function(key, index) {
                 const props = {
                   selected: select.get(key)
                 }
+                console.log('hello');
                 return(
                 <IonSelectOption {...props}>{key}</IonSelectOption>
                 )
-              })}
+              })} */}
+                <IonSelectOption>
+                    Milk
+                </IonSelectOption>
+                <IonSelectOption>
+                    Eggs
+                </IonSelectOption>
+                <IonSelectOption>
+                    Fish (e.g., bass, flounder, cod)
+                </IonSelectOption>
+                <IonSelectOption>
+                    Wheat
+                </IonSelectOption>
+                <IonSelectOption>
+                  Crustacean shellfish (e.g., crab, lobster, shrimp)
+                </IonSelectOption>
+                <IonSelectOption>
+                  Tree nuts (e.g., almonds, walnuts, pecans)
+                </IonSelectOption>
+                <IonSelectOption>
+                    Peanuts
+                </IonSelectOption>
+                <IonSelectOption>
+                    Soybeans
+                </IonSelectOption>
             </IonSelect>
           </IonItem>
           <IonRow>
             <IonCol>
-              <IonButton type="submit" color="danger" expand="block">
+              <IonButton type="submit" color="danger" expand="block" onClick={handleInfo}>
                 Save
               </IonButton>
             </IonCol>
