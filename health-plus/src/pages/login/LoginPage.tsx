@@ -46,14 +46,15 @@ const LoginPage: React.FC = () => {
     };
 
     try {
+      console.log("Attemping to login...");
       await instance.post('users/login', loginData);
       setMessage('');
-      history.push('/recommendations')
+      history.push('/recommendations');
     }
     catch (err){
       if (err instanceof Error) {
         setMessage(err.message);
-        console.log(err.message)
+        console.log(err.message);
       }
     }
   }
