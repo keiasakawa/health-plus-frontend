@@ -47,7 +47,7 @@ async function getHealthData() {
 
 
 const RecommendationTab: React.FC = () => {
-  requestAuthorization();
+  getHealthData();
 
   // TODO: Get ID !!!!!
   const data = RecommendedMeal();
