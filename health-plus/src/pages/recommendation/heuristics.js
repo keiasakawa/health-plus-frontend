@@ -4,7 +4,10 @@ import { instance } from '../../utils'
 
 
 // We calculate the recommended meals and return the top 10
-const RecommendedMeal = (id) => {
+async function RecommendedMeal(healthData) {
+    console.log("Health Data before sending", healthData);
+    const res = await instance.post('meals/recommend', healthData);
+    console.log("Meal data after API call", res);
 
     /*const [profile, setProfile] = useState(null)
     const [health, setHealth ] = useState(null)
@@ -61,7 +64,7 @@ const RecommendedMeal = (id) => {
     let fats = (calories * .28) / 9
 
     // TODO: Get first 10 meals with this information. Lets aim for +/- 100 calories and for the rest of the macros, lets do +/- 5 */
-
+    console.log("Returning that dang meal data");
     return [{image: 'https://www.allrecipes.com/thmb/mKY06P7OC1BDREL8DoSNxCK2vAo=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/2295590-Best-Ever-Meatloaf-ddmfs-083-4x3-1-6d7604c8b4204abd832a26ef85d0e58e.jpg', 
     name: 'Best Ever Meat Loaf', 
     protein: 28, carbs: 22, fats: 23, cals: 410, 

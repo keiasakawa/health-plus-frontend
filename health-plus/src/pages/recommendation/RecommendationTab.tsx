@@ -1,14 +1,16 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent} from '@ionic/react';
 import ExploreContainer from '../../components/ExploreContainer';
 import './RecommendationTab.css';
 import RecommendedMeal from './heuristics';
 import Header from '../../components/Header';
 import { HealthKit, HealthKitOptions } from '@awesome-cordova-plugins/health-kit';
+import { useEffect, useState} from 'react';
 
 const types = [
   'HKQuantityTypeIdentifierHeight',
   'HKQuantityTypeIdentifierBodyMass',
-  'HKQuantityTypeIdentifierActiveEnergyBurned'
+  'HKQuantityTypeIdentifierActiveEnergyBurned',
+  'HKQuantityTypeIdentifierBasalEnergyBurned'
 ];
 const options: HealthKitOptions = {
   readTypes: types,
@@ -36,38 +38,56 @@ async function requestAuthorization() {
 }
 
 async function getHealthData() {
+  // Returns the health data needed from HealthKit to recommend a meal.
   const res = await requestAuthorization();
   if (res === false) { return; }
-  const weight = await HealthKit.readWeight({
+  const weight = (await HealthKit.readWeight({
     'requestWritePermission': false, // use if your app doesn't need to write
     'unit': 'lb'
-  });
-  console.log("Weight: ", weight?.value || "Unknown Weight");
+  }))?.value;
+  console.log("Weight: ", weight || "Unknown Weight");
   const gender = await HealthKit.readGender();
   console.log("The Gender: ", gender);
   const dob = (await HealthKit.readDateOfBirth()).substring(0, 10);
   console.log("Date of Birth: ", dob);
-  const calorie_arr = await HealthKit.querySampleType({
-    'startDate': new Date(new Date().getTime() - (24 * 60 * 60 * 1000)), // three days ago
+  const activeCal = await HealthKit.querySampleType({
+    'startDate': new Date(new Date().getTime() - (24 * 60 * 60 * 1000)),
           'endDate': new Date(), // now
           'sampleType': 'HKQuantityTypeIdentifierActiveEnergyBurned',
-          'unit': 'Cal' // make sure this is compatible with the sampleType
+          'unit': 'Cal' 
   });
+  const restCal = await HealthKit.querySampleType({
+    'startDate': new Date(new Date().getTime() - (24 * 60 * 60 * 1000)),
+          'endDate': new Date(), // now
+          'sampleType': 'HKQuantityTypeIdentifierBasalEnergyBurned',
+          'unit': 'Cal'
+  });
+  const allCalArr = activeCal.concat(restCal);
   let total_cal = 0;
-  for (const calorie_obj of calorie_arr) {
+  for (const calorie_obj of allCalArr) {
     total_cal += calorie_obj?.quantity; 
   }
   console.log("Testing ", total_cal);
-  // calories burned
-  // age/dob
+  return {
+    weight: weight,
+    gender: gender,
+    dob: dob,
+    total_cal: total_cal
+  };
 }
 
 
 const RecommendationTab: React.FC = () => {
-  getHealthData();
-
+  const [mealData, setData] = useState([{
+    image:'', name:'', description:'', cals:0, protein:0, carbs:0, fats:0
+  }]);
+  useEffect(() => {
+    async function loadMealData() {
+      setData(await RecommendedMeal((await getHealthData())));
+    }
+    loadMealData();
+  }, []);
   // TODO: Get ID !!!!!
-  const data = RecommendedMeal();
   return (
     <IonPage>
       <IonHeader>
@@ -76,7 +96,7 @@ const RecommendationTab: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {data.map(recipe => {
+        {mealData.map(recipe => {
           return (
             <>
             <IonCard>
