@@ -42,7 +42,24 @@ async function getHealthData() {
     'requestWritePermission': false, // use if your app doesn't need to write
     'unit': 'lb'
   });
-  console.log("How much I weigh", weight);
+  console.log("Weight: ", weight?.value || "Unknown Weight");
+  const gender = await HealthKit.readGender();
+  console.log("The Gender: ", gender);
+  const dob = (await HealthKit.readDateOfBirth()).substring(0, 10);
+  console.log("Date of Birth: ", dob);
+  const calorie_arr = await HealthKit.querySampleType({
+    'startDate': new Date(new Date().getTime() - (24 * 60 * 60 * 1000)), // three days ago
+          'endDate': new Date(), // now
+          'sampleType': 'HKQuantityTypeIdentifierActiveEnergyBurned',
+          'unit': 'Cal' // make sure this is compatible with the sampleType
+  });
+  let total_cal = 0;
+  for (const calorie_obj of calorie_arr) {
+    total_cal += calorie_obj?.quantity; 
+  }
+  console.log("Testing ", total_cal);
+  // calories burned
+  // age/dob
 }
 
 
