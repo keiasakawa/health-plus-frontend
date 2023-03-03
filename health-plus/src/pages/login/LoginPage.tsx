@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
       console.log("Attemping to login...");
       await instance.post('users/login', loginData);
       setMessage('');
-      history.push('/recommendations');
+      window.location.replace('/recommendations')
     }
     catch (err){
       if (err instanceof Error) {
