@@ -17,6 +17,7 @@ import EditProfile from './pages/editprofile/EditProfile';
 import LoginPage from './pages/login/LoginPage';
 import RegisterPage from './pages/register/RegisterPage';
 import InfoPage from './pages/register/InfoPage';
+import RecipePage from './pages/recipe/RecipePage'
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -65,6 +66,9 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/info">
             <InfoPage />
+          </Route>
+          <Route exact path="/meal/:id">
+            <RecipePage />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
