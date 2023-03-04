@@ -1,13 +1,29 @@
-import { IonContent, IonRow, IonCol, IonHeader, IonPage, IonButton, IonToolbar, IonSearchbar, IonList, IonItem, IonLabel,IonToggle } from '@ionic/react';
+import { IonContent, IonRow, IonCol, IonHeader, IonPage, IonButton, IonToolbar, IonSearchbar, IonList, IonItem, IonLabel, IonToggle, IonCard,  IonCardHeader, IonCardContent, IonCardSubtitle, IonCardTitle, IonInput, IonText} from '@ionic/react';
 import './Search.css';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Header from '../../components/Header'
 import {instance} from '../../utils'
+import { RangeValue } from '@ionic/core';
 
 const Search: React.FC = () => {
   const [search, setSearch] = useState('')
   const [showFilters, setShowFilters] = useState(false);
-  const [data, setData] = useState([])
+  const [data, setData] = useState<any[]>([])
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [pagination, setPagination] = useState(false)
+  const [totalPages, setTotalPages] = useState(0)
+ const [minFats, setMinFats] = useState(0)
+ const [maxFats, setMaxFats] = useState(100)
+
+  useEffect(()=> {
+    handleSearch()
+  }, [currentPage])
+
+  useEffect(() => {
+    setMinFats(0);
+    setMaxFats(100);
+  }, []);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -15,12 +31,18 @@ const Search: React.FC = () => {
 
   const handleSearch = async() => {
     const searchData = {
-      meal_name: search
+      meal_name: search.toLowerCase(),
+      offset: currentPage
     };
+    console.log(currentPage)
     try {
     if (search !== ''){
       const results = await instance.post('meals', searchData);
-      console.log(results);
+      console.log(results.data.meals);
+      console.log(results.data.count);
+      setData(results.data.meals)
+      setPagination(true)
+      setTotalPages(Math.ceil(results.data.count / itemsPerPage))
     }
   }
   catch (err){
@@ -29,6 +51,33 @@ const Search: React.FC = () => {
     }
   }
 
+  }
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    console.log("Previous: ", currentPage)
+    setCurrentPage(currentPage + 1);
+    console.log("Next: ", currentPage)
+  };
+
+  const renderCards = () => {
+    return data.map(recipe => {
+      return(
+        <IonCard>
+          <img width="20%" alt= "Recipe" src={recipe.image_url} />
+          <IonCardHeader>
+            <IonCardTitle>{recipe.meal_name}</IonCardTitle>
+            <IonCardSubtitle>Calories: {recipe.calories}, Protein: {recipe.protein}, Carbohydrates: {recipe.carbohydrates}, Fats: {recipe.total_fat}</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            {recipe.meal_description}
+          </IonCardContent>
+        </IonCard> 
+      )
+    })
   }
 
   return (
@@ -40,27 +89,9 @@ const Search: React.FC = () => {
     </IonHeader>
     <IonContent fullscreen>
       <IonSearchbar value={search} onIonChange={e => setSearch(e.target.value!)}></IonSearchbar>
-      {showFilters && (
-          <IonList>
-            <IonItem>
-              <IonLabel>Filter 1</IonLabel>
-              <IonToggle />
-            </IonItem>
-            <IonItem>
-              <IonLabel>Filter 2</IonLabel>
-              <IonToggle />
-            </IonItem>
-            <IonItem>
-              <IonLabel>Filter 3</IonLabel>
-              <IonToggle />
-            </IonItem>
-          </IonList>
-        )}
-        {!showFilters && <IonButton onClick={toggleFilters}>Apply Filters</IonButton>}
-        {showFilters && <IonButton onClick={toggleFilters}>Hide Filters</IonButton>}
-        <IonRow>
-          <IonButton onClick={handleSearch}>Search</IonButton>
-        </IonRow>
+      <IonButton onClick={handleSearch}>Search</IonButton>
+        {renderCards()}
+        {pagination &&  <><IonButton onClick={handlePrevPage} disabled={currentPage === 1}>Prev</IonButton><IonButton onClick={handleNextPage} disabled={currentPage === totalPages}>Next</IonButton></>}
     </IonContent>
   </IonPage>
   );
