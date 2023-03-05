@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react';
 import Header from '../../components/Header'
 import {instance} from '../../utils'
 import { RangeValue } from '@ionic/core';
+import { useHistory } from 'react-router-dom';
 
 const Search: React.FC = () => {
   const [search, setSearch] = useState('')
@@ -15,6 +16,7 @@ const Search: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0)
  const [minFats, setMinFats] = useState(0)
  const [maxFats, setMaxFats] = useState(100)
+ const history = useHistory();
 
   useEffect(()=> {
     handleSearch()
@@ -63,10 +65,15 @@ const Search: React.FC = () => {
     console.log("Next: ", currentPage)
   };
 
+  const redirect = (id: string) => {
+    console.log(id)
+    history.push(`meal/${id}`)
+  }
+
   const renderCards = () => {
     return data.map(recipe => {
       return(
-        <IonCard>
+        <IonCard onClick={() => {redirect(recipe.id);}}>
           <img width="20%" alt= "Recipe" src={recipe.image_url} />
           <IonCardHeader>
             <IonCardTitle>{recipe.meal_name}</IonCardTitle>
