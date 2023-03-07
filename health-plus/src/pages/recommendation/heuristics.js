@@ -63,6 +63,8 @@ async function RecommendedMeal(healthData) {
 
     let fats = (calories * .28) / 9
 
+
+
     // TODO: Get first 10 meals with this information. Lets aim for +/- 100 calories and for the rest of the macros, lets do +/- 5 */
     console.log("Returning that dang meal data");
     return [{image: 'https://www.allrecipes.com/thmb/mKY06P7OC1BDREL8DoSNxCK2vAo=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/2295590-Best-Ever-Meatloaf-ddmfs-083-4x3-1-6d7604c8b4204abd832a26ef85d0e58e.jpg', 
