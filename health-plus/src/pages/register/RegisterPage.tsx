@@ -43,13 +43,12 @@ import {
         return;
       }
       const registerData = {
-        id: uuidv4(),
         email: email,
         password: password,
       };
       try {
-        await instance.post('users/register', registerData);
-        localStorage.setItem('id', registerData.id)
+        const response = await instance.post('users/register', registerData);
+        localStorage.setItem('id', response.data.id)
         history.push('/info')
       }
       catch (err){

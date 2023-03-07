@@ -44,7 +44,7 @@ import {
         allergies: allergies,
       };
       try {
-        await instance.post('users/info', infoData);
+        await instance.put('users/info/' + infoData.id, infoData);
         window.location.replace('/recommendations')
       }
       catch (err){
