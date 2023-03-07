@@ -33,7 +33,8 @@ import {
     const [goal, setGoal] = useState('')
     const [allergies, setAllergies] = useState([])
     const [disabled, setDisabled] = useState(true)
-    const [weight, setWeight] = useState('')
+    const [weight, setWeight] = useState('');
+    const [mealsPerDay, setMealsPerDay] = useState('');
     
     const handleInfo = async() => 
     {
@@ -41,6 +42,7 @@ import {
         goal: goal,
         weight: weight,
         allergies: allergies,
+        meals_per_day: mealsPerDay
       };
       const headers = {
         Authorization: "Bearer " + localStorage.getItem("token")
@@ -89,6 +91,11 @@ import {
           <IonItem className="weight-component">
             <IonLabel position="stacked">What is your weight? (In pounds)</IonLabel>
             <IonInput type="number" value={weight} onIonChange={e => setWeight(e.detail.value!)}>
+            </IonInput>
+          </IonItem>
+          <IonItem className="mealsPerDay-component">
+            <IonLabel position="stacked">How many meals do you eat in a day?</IonLabel>
+            <IonInput type="number" value={mealsPerDay} onIonChange={e => setMealsPerDay(e.detail.value!)}>
             </IonInput>
           </IonItem>
           <IonItem className="allergies-component" lines="full">

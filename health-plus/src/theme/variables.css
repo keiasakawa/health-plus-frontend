@@ -76,10 +76,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-tint: #f5f6f9;
 }
 
-@font-face {
-  font-family: 'Quicksand';
-  src: url('../assets/Quicksand-Regular.ttf');
-}
+
 
 * {
   font-family: 'Quicksand';
