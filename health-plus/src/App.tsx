@@ -17,7 +17,8 @@ import EditProfile from './pages/editprofile/EditProfile';
 import LoginPage from './pages/login/LoginPage';
 import RegisterPage from './pages/register/RegisterPage';
 import InfoPage from './pages/register/InfoPage';
-import RecipePage from './pages/recipe/RecipePage'
+import RecipePage from './pages/recipe/RecipePage';
+import { isTokenExpired } from './utils.js';
 //import HealthKitStuff from './pages/login/HealthKitData';
 
 
@@ -42,35 +43,43 @@ import './theme/variables.css';
 
 setupIonicReact();
 
+const AuthWrapper = () => {
+  return (async () => {
+    return await isTokenExpired() ? <Redirect to="/login" /> : <IonRouterOutlet />;
+  }
+  )();
+};
+
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route exact path="/recommendations">
-            <RecommendationTab />
-          </Route>
-          <Route exact path="/search">
-            <Search />
-          </Route>
-          <Route path="/editprofile">
-            <EditProfile />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/recommendations" />
-          </Route>
+            <Route exact path="/recommendations">
+              <RecommendationTab />
+            </Route>
+            <Route exact path="/search">
+              <Search />
+            </Route>
+            <Route path="/editprofile">
+              <EditProfile />
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/recommendations" />
+            </Route>
+
+            <Route exact path="/info">
+              <InfoPage />
+            </Route>
+            <Route exact path="/meal/:id">
+              <RecipePage />
+            </Route>
           <Route exact path="/login">
-            <LoginPage />
-          </Route>
-          <Route exact path="/register">
-            <RegisterPage />
-          </Route>
-          <Route exact path="/info">
-            <InfoPage />
-          </Route>
-          <Route exact path="/meal/:id">
-            <RecipePage />
-          </Route>
+              <LoginPage />
+            </Route>
+            <Route exact path="/register">
+              <RegisterPage />
+            </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="recommendations" href="/recommendations">
