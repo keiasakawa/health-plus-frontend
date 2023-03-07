@@ -82,7 +82,7 @@ http://ionicframework.com/docs/theming/ */
 }
 
 * {
-  font-family: 'Quicksand';
+  font-family: 'Quicksand', 'Verdana';
 }
 
 @media (prefers-color-scheme: dark) {

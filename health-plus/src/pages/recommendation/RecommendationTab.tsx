@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import { HealthKit, HealthKitOptions } from '@awesome-cordova-plugins/health-kit';
 import { useEffect, useState} from 'react';
 import { instance } from '../../utils';
+import LoginFilter from '../../filter/LoginFilter';
 
 const types = [
   'HKQuantityTypeIdentifierHeight',
