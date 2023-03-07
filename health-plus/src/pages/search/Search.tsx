@@ -5,6 +5,7 @@ import Header from '../../components/Header'
 import { instance } from '../../utils';
 import { RangeValue } from '@ionic/core';
 import { useHistory } from 'react-router-dom';
+import LoginFilter from '../../filter/LoginFilter'
 
 const Search: React.FC = () => {
   const [search, setSearch] = useState('')
@@ -103,4 +104,4 @@ const Search: React.FC = () => {
   );
 };
 
-export default Search;
+export default LoginFilter(Search);

@@ -3,6 +3,7 @@ import './EditProfile.css';
 import Header from '../../components/Header'
 import { useState, useEffect } from 'react';
 import {instance} from '../../utils'
+import LoginFilter from '../../filter/LoginFilter'
 
 const EditProfile: React.FC = () => {
   const [goal, setGoal] = useState('');
@@ -143,4 +144,4 @@ const EditProfile: React.FC = () => {
   );
 };
 
-export default EditProfile;
+export default LoginFilter(EditProfile);

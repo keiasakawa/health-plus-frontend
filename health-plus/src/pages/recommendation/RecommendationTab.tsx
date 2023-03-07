@@ -137,4 +137,4 @@ const RecommendationTab: React.FC = () => {
   );
 };
 
-export default RecommendationTab;
+export default LoginFilter(RecommendationTab);
