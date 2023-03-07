@@ -7,9 +7,8 @@ const LoginFilter = (Component: any) => {
         const history = useHistory();
 
         useEffect(() => {
-            console.log(localStorage.getItem('id'));
-            const loginAuth = localStorage.getItem('id');
-            if (!loginAuth && loginAuth !== '') {
+            const loginAuth = localStorage.getItem('token');
+            if (loginAuth) {
                 setAuthenticated(true);
             }
             else {

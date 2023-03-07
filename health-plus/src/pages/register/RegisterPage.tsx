@@ -1,4 +1,4 @@
-import './RegisterPage.css'
+import './RegisterPage.css';
 import {
     IonContent,
     IonHeader,
@@ -16,10 +16,9 @@ import {
     useIonViewWillEnter,
     IonNote
   } from "@ionic/react";
-  import {useState} from 'react'
-  import {instance} from '../../utils'
+  import {useState} from 'react';
+  import {instance} from '../../utils';
   import { useHistory } from 'react-router-dom';
-  const {v4: uuidv4} = require('uuid');
 
   export function hideTabs() {
     const tabsEl = document.querySelector('ion-tab-bar');
@@ -38,25 +37,24 @@ import {
     const history = useHistory();
 
     const handleRegister = async() => {
+      const registerData = {
+        email: email,
+        password: password,
+      };
+
       if (email === '' || password === '') {
         setMessage('Please enter email/password');
         return;
       }
-      const registerData = {
-        id: uuidv4(),
-        email: email,
-        password: password,
-      };
+
       try {
         await instance.post('users/register', registerData);
-        localStorage.setItem('id', registerData.id)
-        history.push('/info')
+        const response = await instance.post('users/login', registerData);
+        localStorage.setItem('token', response.data.token);
+        history.push('/info');
       }
-      catch (err){
-        if (err instanceof Error) {
-          setMessage(err.message);
-          console.log(err.message)
-        }
+      catch (err: any){
+        setMessage(err.response.data.error);
       }
     }
 

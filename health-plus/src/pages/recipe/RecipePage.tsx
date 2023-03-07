@@ -62,7 +62,7 @@ const RecipePage: React.FC = () => {
           <IonContent class="ion-text-center" fullscreen>
             <IonRow>
                 <IonCol>
-                <img src={data!.image_url} width="25%"/>
+                <img src={data!.image_url} width="50%" />
                 </IonCol>
             </IonRow>
             <IonRow> 
