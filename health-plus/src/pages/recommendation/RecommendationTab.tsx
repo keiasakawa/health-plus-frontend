@@ -1,7 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent} from '@ionic/react';
 import ExploreContainer from '../../components/ExploreContainer';
 import './RecommendationTab.css';
-import RecommendedMeal from './heuristics';
+import { dummyMeal, recommendedMeal } from './heuristics';
 import Header from '../../components/Header';
 import { HealthKit, HealthKitOptions } from '@awesome-cordova-plugins/health-kit';
 import { useEffect, useState} from 'react';
@@ -18,7 +18,7 @@ const options: HealthKitOptions = {
 };
 
 
-async function requestAuthorization() {
+const requestAuthorization = async () => {
   // Need to run this before any healthkit stuff
   if (! (await HealthKit.available())) {
     console.log("HealthKit is not available on this app.");
@@ -37,7 +37,7 @@ async function requestAuthorization() {
   return true;
 }
 
-async function getHealthData() {
+const getHealthData = async () => {
   // Returns the health data needed from HealthKit to recommend a meal.
   const res = await requestAuthorization();
   if (res === false) { return; }
@@ -82,10 +82,14 @@ const RecommendationTab: React.FC = () => {
     image:'', name:'', description:'', cals:0, protein:0, carbs:0, fats:0
   }]);
   useEffect(() => {
-    async function loadMealData() {
-      setData(await RecommendedMeal((await getHealthData())));
-    }
-    loadMealData();
+    (async () => {
+      const healthkitAuthorized = await requestAuthorization();
+      if (healthkitAuthorized) {
+        setData(await recommendedMeal(await getHealthData()));
+      } else {
+        setData(dummyMeal());
+      }
+    })();
   }, []);
   // TODO: Get ID !!!!!
   return (

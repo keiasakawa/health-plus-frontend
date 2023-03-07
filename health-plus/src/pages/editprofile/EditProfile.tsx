@@ -16,16 +16,15 @@ const EditProfile: React.FC = () => {
 
   const getInfo = async() => {
     try {
-      const id = localStorage.getItem('id')
-      let res = await instance.get(`users/info/${id}`)
-      console.log(res)
-      setGoal(res.data[0].fitness_goal)
-      setAllergies(res.data[0].allergies)
-      setWeight(res.data[0].weight)
-      console.log(goal)
-      console.log(weight)
-      console.log(allergies)
-
+      const headers = {
+        Authorization: "Bearer " + localStorage.getItem("token")
+      };
+      let res = await instance.get('users/info', {
+        headers: headers
+      });
+      setGoal(res.data[0].fitness_goal);
+      setAllergies(res.data[0].allergies);
+      setWeight(res.data[0].weight);
     }
     catch (err){
       if (err instanceof Error) {
@@ -40,9 +39,13 @@ const EditProfile: React.FC = () => {
       weight: weight,
       allergies: allergies,
     };
+    const headers = {
+      Authorization: "Bearer " + localStorage.getItem("token")
+    };
     try {
-      console.log(infoData)
-      await instance.put(`users/info/${localStorage.getItem('id')}`, infoData);
+      await instance.put('/users/info', infoData, {
+        headers: headers
+      });
     }
     catch (err){
       if (err instanceof Error) {
@@ -52,7 +55,6 @@ const EditProfile: React.FC = () => {
   }
 
   useEffect(() => {
-    console.log('L')
     getInfo();
   }, []);
 

@@ -38,13 +38,17 @@ import {
     const handleInfo = async() => 
     {
       const infoData = {
-        id: localStorage.getItem('id'),
         goal: goal,
         weight: weight,
         allergies: allergies,
       };
+      const headers = {
+        Authorization: "Bearer " + localStorage.getItem("token")
+      };
       try {
-        await instance.put('users/info/' + infoData.id, infoData);
+        await instance.post('users/info', infoData, {
+          headers: headers
+        });
         window.location.replace('/recommendations')
       }
       catch (err){

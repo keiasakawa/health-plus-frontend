@@ -47,9 +47,10 @@ const LoginPage: React.FC = () => {
 
     try {
       console.log("Attemping to login...");
-      await instance.post('users/login', loginData);
+      const response = await instance.post('users/login', loginData);
+      localStorage.setItem('token', response.data.token);
       setMessage('');
-      window.location.replace('/recommendations')
+      window.location.replace('/recommendations');
     }
     catch (err){
       if (err instanceof Error) {

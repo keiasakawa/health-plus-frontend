@@ -34,14 +34,14 @@ const Search: React.FC = () => {
   const handleSearch = async() => {
     const searchData = {
       meal_name: search.toLowerCase(),
-      offset: currentPage
+      offset: currentPage,
     };
-    console.log(currentPage)
+    const headers = {
+      Authorization: "Bearer " + localStorage.getItem("token")
+    };
     try {
     if (search !== ''){
-      const results = await instance.post('meals', searchData);
-      console.log(results.data.meals);
-      console.log(results.data.count);
+      const results = await instance.post('meals', searchData, {headers});
       setData(results.data.meals)
       setPagination(true)
       setTotalPages(Math.ceil(results.data.count / itemsPerPage))
@@ -66,14 +66,13 @@ const Search: React.FC = () => {
   };
 
   const redirect = (id: string) => {
-    console.log(id)
     history.push(`meal/${id}`)
   }
 
   const renderCards = () => {
     return data.map(recipe => {
       return(
-        <IonCard onClick={() => {redirect(recipe.id);}}>
+        <IonCard key={recipe.id} onClick={() => {redirect(recipe.id);}}>
           <img width="20%" alt= "Recipe" src={recipe.image_url} />
           <IonCardHeader>
             <IonCardTitle>{recipe.meal_name}</IonCardTitle>

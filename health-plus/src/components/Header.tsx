@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 const Header: React.FC = () => {
     const history = useHistory();
     const handleLogout = () => {
-        history.push('/login')
+        history.push('/login');
+        localStorage.removeItem("token");
     }
     return (<IonButton onClick={handleLogout}>Logout</IonButton>)
 }
