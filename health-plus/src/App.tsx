@@ -18,6 +18,7 @@ import LoginPage from './pages/login/LoginPage';
 import RegisterPage from './pages/register/RegisterPage';
 import InfoPage from './pages/register/InfoPage';
 import RecipePage from './pages/recipe/RecipePage'
+//import HealthKitStuff from './pages/login/HealthKitData';
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -56,7 +57,7 @@ const App: React.FC = () => (
             <EditProfile />
           </Route>
           <Route exact path="/">
-            <Redirect to="/login" />
+            <Redirect to="/recommendations" />
           </Route>
           <Route exact path="/login">
             <LoginPage />

@@ -17,7 +17,11 @@ import {
 import { useHistory } from 'react-router-dom';
 import React, { useState } from 'react'
 import { BsPersonCircle } from "react-icons/bs";
-import {instance} from '../../utils'
+import {instance} from '../../utils';
+import { HealthKit, HealthKitOptions } from '@awesome-cordova-plugins/health-kit';
+//import { HealthKit } from '@ionic-native/health-kit';
+
+
 
 export function hideTabs() {
   const tabsEl = document.querySelector('ion-tab-bar');
@@ -35,8 +39,9 @@ const LoginPage: React.FC = () => {
 
 
   const handleSignIn = async() => {
+    //let hk = new HealthKit();
     if (email === '' || password === '') {
-      setMessage('Please enter email/password');
+      setMessage('Enter email/password');
       return;
     }
 
@@ -102,5 +107,7 @@ const LoginPage: React.FC = () => {
     </IonPage>
   );
 };
+
+
 
 export default LoginPage;
