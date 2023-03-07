@@ -5,6 +5,7 @@ import RecommendedMeal from './heuristics';
 import Header from '../../components/Header';
 import { HealthKit, HealthKitOptions } from '@awesome-cordova-plugins/health-kit';
 import { useEffect, useState} from 'react';
+import LoginFilter from '../../filter/LoginFilter'
 
 const types = [
   'HKQuantityTypeIdentifierHeight',
@@ -117,4 +118,4 @@ const RecommendationTab: React.FC = () => {
   );
 };
 
-export default RecommendationTab;
+export default LoginFilter(RecommendationTab);

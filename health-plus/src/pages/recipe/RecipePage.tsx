@@ -21,6 +21,7 @@ import {
   import {instance} from '../../utils'
   import { useParams, useHistory } from 'react-router-dom';
   import {useState, useEffect} from 'react'
+  import LoginFilter from '../../filter/LoginFilter'
 
 const RecipePage: React.FC = () => {
     const { id: mealId } = useParams<{id: string }>();
@@ -104,4 +105,4 @@ const RecipePage: React.FC = () => {
       );
 }
 
-export default RecipePage;
+export default LoginFilter(RecipePage);
