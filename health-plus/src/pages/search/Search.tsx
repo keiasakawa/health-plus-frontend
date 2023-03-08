@@ -2,7 +2,7 @@ import { IonContent, IonRow, IonCol, IonHeader, IonPage, IonButton, IonToolbar, 
 import './Search.css';
 import {useState, useEffect} from 'react';
 import Header from '../../components/Header'
-import {instance} from '../../utils'
+import { instance } from '../../utils';
 import { RangeValue } from '@ionic/core';
 import { useHistory } from 'react-router-dom';
 import LoginFilter from '../../filter/LoginFilter'

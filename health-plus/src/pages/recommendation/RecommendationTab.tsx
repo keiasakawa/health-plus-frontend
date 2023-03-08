@@ -5,7 +5,8 @@ import { dummyMeal, recommendedMeal } from './heuristics';
 import Header from '../../components/Header';
 import { HealthKit, HealthKitOptions } from '@awesome-cordova-plugins/health-kit';
 import { useEffect, useState} from 'react';
-import LoginFilter from '../../filter/LoginFilter'
+import { instance } from '../../utils';
+import LoginFilter from '../../filter/LoginFilter';
 
 const types = [
   'HKQuantityTypeIdentifierHeight',
@@ -47,6 +48,7 @@ const getHealthData = async () => {
     'unit': 'lb'
   }))?.value;
   console.log("Weight: ", weight || "Unknown Weight");
+  const height = await HealthKit.readHeight({"unit": "in"});
   const gender = await HealthKit.readGender();
   console.log("The Gender: ", gender);
   const dob = (await HealthKit.readDateOfBirth()).substring(0, 10);
@@ -69,11 +71,19 @@ const getHealthData = async () => {
     total_cal += calorie_obj?.quantity; 
   }
   console.log("Testing ", total_cal);
+  console.log({
+    weight: weight,
+    gender: gender,
+    dob: dob,
+    total_cal: total_cal,
+    height: height.value
+  });
   return {
     weight: weight,
     gender: gender,
     dob: dob,
-    total_cal: total_cal
+    total_cal: total_cal,
+    height: height.value
   };
 }
 
@@ -86,7 +96,13 @@ const RecommendationTab: React.FC = () => {
     (async () => {
       const healthkitAuthorized = await requestAuthorization();
       if (healthkitAuthorized) {
-        setData(await recommendedMeal(await getHealthData()));
+        const healthData = await getHealthData();
+        const headers = {
+          Authorization: "Bearer " + localStorage.getItem("token")
+        };
+        const response = await instance.post('/meals/recommended', healthData, {headers});
+        console.log(response.data);
+        setData(response.data);
       } else {
         setData(dummyMeal());
       }
