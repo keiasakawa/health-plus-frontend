@@ -35,7 +35,7 @@ const Search: React.FC = () => {
   const handleSearch = async() => {
     const searchData = {
       meal_name: search.toLowerCase(),
-      offset: currentPage,
+      offset: currentPage - 1,
     };
     const headers = {
       Authorization: "Bearer " + localStorage.getItem("token")
