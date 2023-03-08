@@ -8,6 +8,7 @@ const LoginFilter = (Component: any) => {
 
         useEffect(() => {
             const loginAuth = localStorage.getItem('token');
+            console.log(loginAuth)
             if (loginAuth) {
                 setAuthenticated(true);
             }

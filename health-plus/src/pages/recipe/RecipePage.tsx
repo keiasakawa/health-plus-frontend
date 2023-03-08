@@ -27,12 +27,46 @@ const RecipePage: React.FC = () => {
     const { id: mealId } = useParams<{id: string }>();
 
     const [data, setData] = useState<any>({})
+    const [allergies, setAllergies] = useState([]);
     const history = useHistory();
 
+    const commonAllergies = ['milk', 'eggs', 'fish', 'bass', 'flounder', 'halibut', 'cod', 'wheat', 'crab', 'lobster', 'shrimp', 'nut', 'almond', 'walnut', 'pecan', 'peanut', 'soybean']
+
+
+    const handleWarning = async(data: any) => {
+        const headers = {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          };
+          try {
+            let res = await instance.get('users/info', {
+                headers: headers
+              });
+            const allergies = res.data[0].allergies;
+            let warnings = new Set();
+            for (let i = 0; i < commonAllergies.length; i ++) {
+                for ( let j = 0; j < allergies.length; j ++) {
+                    if (allergies[j].toLowerCase().includes(commonAllergies[i])) {
+                        warnings.add(commonAllergies[i])
+                    }
+                }
+            }
+            console.log(warnings)
+          }
+          catch (err){
+            if (err instanceof Error) {
+              console.log(err.message)
+            }
+        }
+    }
+
     const handleMeal = async() => {
+        const headers = {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          };
         try {
-            const res = await instance.get(`meals/${mealId}`);
+            const res = await instance.get(`meals/${mealId}`, {headers: headers});
             setData(res.data)
+            handleWarning(res.data)
         }
         catch (err){
             if (err instanceof Error) {
