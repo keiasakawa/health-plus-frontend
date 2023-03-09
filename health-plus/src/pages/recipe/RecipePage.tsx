@@ -10,11 +10,11 @@ import {
     IonIcon,
     IonButton,
     IonLabel,
-    IonInput,
+    IonCardContent,
     IonText,
     useIonViewWillEnter,
-    IonNote,
-    IonImg,
+    IonCardTitle,
+    IonCard,
     IonList,
     IonListHeader
   } from "@ionic/react";
@@ -27,36 +27,26 @@ const RecipePage: React.FC = () => {
     const { id: mealId } = useParams<{id: string }>();
 
     const [data, setData] = useState<any>({})
-    const [allergies, setAllergies] = useState([]);
+    const [allergies, setAllergies] = useState(new Set());
     const history = useHistory();
 
     const commonAllergies = ['milk', 'eggs', 'fish', 'bass', 'flounder', 'halibut', 'cod', 'wheat', 'crab', 'lobster', 'shrimp', 'nut', 'almond', 'walnut', 'pecan', 'peanut', 'soybean']
 
 
-    const handleWarning = async(data: any) => {
-        const headers = {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          };
-          try {
-            let res = await instance.get('users/info', {
-                headers: headers
-              });
-            const allergies = res.data[0].allergies;
+    const handleWarning = (data: any) => {
+            const ingredients = data!.recipe_ingedients
+            console.log(ingredients)
             let warnings = new Set();
             for (let i = 0; i < commonAllergies.length; i ++) {
-                for ( let j = 0; j < allergies.length; j ++) {
-                    if (allergies[j].toLowerCase().includes(commonAllergies[i])) {
+                for ( let j = 0; j < ingredients.length; j ++) {
+                    if (ingredients[j].toLowerCase().includes(commonAllergies[i])) {
+                        console.log(ingredients[j].toLowerCase())
+                        console.log(commonAllergies[i])
                         warnings.add(commonAllergies[i])
                     }
                 }
             }
-            console.log(warnings)
-          }
-          catch (err){
-            if (err instanceof Error) {
-              console.log(err.message)
-            }
-        }
+            setAllergies(warnings)
     }
 
     const handleMeal = async() => {
@@ -102,6 +92,22 @@ const RecipePage: React.FC = () => {
             <IonRow> 
                 <IonCol>
                 <IonText><p>{data!.meal_description}</p></IonText>
+                </IonCol>
+            </IonRow>
+            <IonRow class="ion-text-center"> 
+                <IonCol class="ion-text-wrap">
+                    {allergies.size !== 0 && 
+                                <IonCard class="ion-text-wrap" color="danger">
+                                    <IonCardTitle>Warning. May contain the following.</IonCardTitle>
+                                    <IonCardContent>
+                                    {Array.from(allergies).map((ingredient:any) => {
+                                return (
+                                        <IonText>{ingredient} </IonText>
+                                )
+                            })}
+                                    </IonCardContent>
+                                </IonCard>
+                    }               
                 </IonCol>
             </IonRow>
             <IonRow> 
