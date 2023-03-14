@@ -67,7 +67,10 @@ const Search: React.FC = () => {
   };
 
   const redirect = (id: string) => {
-    history.push(`meal/${id}`)
+    history.push({
+      pathname: `meal/${id}`,
+      state: {detail: 'search'}
+    })
   }
 
   const renderCards = () => {

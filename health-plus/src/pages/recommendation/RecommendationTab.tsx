@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import { HealthKit, HealthKitOptions } from '@awesome-cordova-plugins/health-kit';
 import { useEffect, useState} from 'react';
 import { instance } from '../../utils';
+import { useHistory } from 'react-router-dom';
 import LoginFilter from '../../filter/LoginFilter';
 
 const types = [
@@ -90,8 +91,9 @@ const getHealthData = async () => {
 
 const RecommendationTab: React.FC = () => {
   const [mealData, setData] = useState([{
-    image:'', name:'', description:'', cals:0, protein:0, carbs:0, fats:0
+    id: '', image:'', name:'', description:'', cals:0, protein:0, carbs:0, fats:0
   }]);
+  const history = useHistory();
   useEffect(() => {
     (async () => {
       const healthkitAuthorized = await requestAuthorization();
@@ -104,10 +106,17 @@ const RecommendationTab: React.FC = () => {
         console.log(response.data);
         setData(response.data);
       } else {
-        setData(dummyMeal());
+        setData([]);
       }
     })();
   }, []);
+
+  const redirect = (id: string) => {
+    history.push({
+      pathname: `meal/${id}`,
+      state: {detail: 'recommendation'}
+    })
+  }
   // TODO: Get ID !!!!!
   return (
     <IonPage>
@@ -120,7 +129,7 @@ const RecommendationTab: React.FC = () => {
         {mealData.map(recipe => {
           return (
             <>
-            <IonCard>
+            <IonCard key={recipe.id} onClick={() => {redirect(recipe.id);}}>
               <img width="20%" alt= "Recipe" src={recipe.image} />
               <IonCardHeader>
                 <IonCardTitle>{recipe.name}</IonCardTitle>

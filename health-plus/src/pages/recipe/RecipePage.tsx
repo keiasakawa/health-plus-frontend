@@ -22,6 +22,7 @@ import {
   import { useParams, useHistory } from 'react-router-dom';
   import {useState, useEffect} from 'react'
   import LoginFilter from '../../filter/LoginFilter'
+  import { useLocation } from "react-router-dom";
 
 const RecipePage: React.FC = () => {
     const { id: mealId } = useParams<{id: string }>();
@@ -29,6 +30,7 @@ const RecipePage: React.FC = () => {
     const [data, setData] = useState<any>({})
     const [allergies, setAllergies] = useState(new Set());
     const history = useHistory();
+    const location = useLocation<Location>();
 
     const map = {'milk': 'Milk', 
     'eggs': 'Eggs', 
@@ -50,6 +52,10 @@ const RecipePage: React.FC = () => {
     const commonAllergies2 = new Map(Object.entries(map));
 
     const commonAllergies = ['milk', 'eggs', 'fish', 'bass', 'flounder', 'halibut', 'cod', 'wheat', 'crab', 'lobster', 'shrimp', 'nut', 'almond', 'walnut', 'pecan', 'peanut', 'soybean']
+
+    interface Location {
+        detail: string
+    }
 
 
     const handleWarning = (data: any) => {
@@ -83,7 +89,8 @@ const RecipePage: React.FC = () => {
     }
 
     const handleNavigation = () => {
-        history.push('/search')
+        console.log(location)
+        history.push(`/${location.state.detail}`)
     }
 
     useEffect(() => {
