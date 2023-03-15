@@ -71,7 +71,6 @@ const getHealthData = async () => {
   for (const calorie_obj of allCalArr) {
     total_cal += calorie_obj?.quantity; 
   }
-  console.log("Testing ", total_cal);
   console.log({
     weight: weight,
     gender: gender,
@@ -94,12 +93,13 @@ const RecommendationTab: React.FC = () => {
     id: '', 
     meal_name:'', 
     calories:0, 
-    total_fats:0,
+    total_fat:0,
     carbohydrates:0,
     protein:0, 
     image_url:'',
     meal_description:'',
   }]);
+  let emptyMessage = 'No Meals to Show!';
   const history = useHistory();
   useEffect(() => {
     (async () => {
@@ -111,8 +111,13 @@ const RecommendationTab: React.FC = () => {
         };
         const response = await instance.post('/meals/recommended', healthData, {headers});
         console.log(response.data);
-        setData(response.data);
-        console.log("THE DATA", response.data)
+        if (response.data.length == 0) { 
+          emptyMessage = '';
+          setData([]);
+        }
+        else { 
+          setData(response.data);
+        }
       } else {
         setData([]);
       }
@@ -126,11 +131,13 @@ const RecommendationTab: React.FC = () => {
     })
   }
 
+
   // TODO: Get ID !!!!!
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <p>{emptyMessage}</p>
           <Header />
         </IonToolbar>
       </IonHeader>
@@ -142,7 +149,7 @@ const RecommendationTab: React.FC = () => {
               <img width="20%" alt= "Recipe" src={recipe.image_url} />
               <IonCardTitle text-wrap>{recipe.meal_name}</IonCardTitle>
               <IonCardHeader>
-                <IonCardSubtitle>Calories: {recipe.calories}, Protein: {recipe.protein}, Carbohydrates: {recipe.carbohydrates}, Fats: {recipe.total_fats}</IonCardSubtitle>
+                <IonCardSubtitle>Calories: {recipe.calories}, Protein: {recipe.protein}, Carbohydrates: {recipe.carbohydrates}, Fats: {recipe.total_fat}</IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
                 {recipe.meal_description}
