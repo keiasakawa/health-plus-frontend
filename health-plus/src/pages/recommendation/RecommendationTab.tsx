@@ -91,7 +91,14 @@ const getHealthData = async () => {
 
 const RecommendationTab: React.FC = () => {
   const [mealData, setData] = useState([{
-    id: '', image:'', name:'', description:'', cals:0, protein:0, carbs:0, fats:0
+    id: '', 
+    meal_name:'', 
+    calories:0, 
+    total_fats:0,
+    carbohydrates:0,
+    protein:0, 
+    image_url:'',
+    meal_description:'',
   }]);
   const history = useHistory();
   useEffect(() => {
@@ -105,6 +112,7 @@ const RecommendationTab: React.FC = () => {
         const response = await instance.post('/meals/recommended', healthData, {headers});
         console.log(response.data);
         setData(response.data);
+        console.log("THE DATA", response.data)
       } else {
         setData([]);
       }
@@ -114,9 +122,10 @@ const RecommendationTab: React.FC = () => {
   const redirect = (id: string) => {
     history.push({
       pathname: `meal/${id}`,
-      state: {detail: 'recommendation'}
+      state: {detail: 'recommendations'}
     })
   }
+
   // TODO: Get ID !!!!!
   return (
     <IonPage>
@@ -130,13 +139,13 @@ const RecommendationTab: React.FC = () => {
           return (
             <>
             <IonCard key={recipe.id} onClick={() => {redirect(recipe.id);}}>
-              <img width="20%" alt= "Recipe" src={recipe.image} />
+              <img width="20%" alt= "Recipe" src={recipe.image_url} />
+              <IonCardTitle text-wrap>{recipe.meal_name}</IonCardTitle>
               <IonCardHeader>
-                <IonCardTitle>{recipe.name}</IonCardTitle>
-                <IonCardSubtitle>Calories: {recipe.cals}, Protein: {recipe.protein}, Carbohydrates: {recipe.carbs}, Fats: {recipe.fats}</IonCardSubtitle>
+                <IonCardSubtitle>Calories: {recipe.calories}, Protein: {recipe.protein}, Carbohydrates: {recipe.carbohydrates}, Fats: {recipe.total_fats}</IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
-                {recipe.description}
+                {recipe.meal_description}
               </IonCardContent>
             </IonCard> 
             </>

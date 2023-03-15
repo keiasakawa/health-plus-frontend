@@ -59,7 +59,7 @@ const RecipePage: React.FC = () => {
 
 
     const handleWarning = (data: any) => {
-            const ingredients = data!.recipe_ingedients
+            const ingredients = data!.recipe_ingredients
             console.log(ingredients)
             let warnings = new Set();
             for (let i = 0; i < commonAllergies.length; i ++) {
@@ -89,7 +89,7 @@ const RecipePage: React.FC = () => {
     }
 
     const handleNavigation = () => {
-        console.log(location)
+        console.log("The location", location)
         history.push(`/${location.state.detail}`)
     }
 
@@ -101,16 +101,19 @@ const RecipePage: React.FC = () => {
         <IonPage>
           <IonHeader>
               <IonToolbar>
-                <IonRow>
                 <IonButton onClick={() => handleNavigation()}>Back</IonButton>
-                <IonTitle class="ion-text-center" size="large">{data!.meal_name}</IonTitle>
-                </IonRow>
+                <IonTitle>{data!.meal_name}</IonTitle>
               </IonToolbar>
           </IonHeader>
           <IonContent class="ion-text-center" fullscreen>
             <IonRow>
                 <IonCol>
                 <img src={data!.image_url} width="50%" />
+                </IonCol>
+            </IonRow>
+            <IonRow>
+                <IonCol>
+                    <p>{data!.servings || 1} Serving(s)</p>
                 </IonCol>
             </IonRow>
             <IonRow> 
@@ -142,7 +145,7 @@ const RecipePage: React.FC = () => {
                                 <h1>Ingredients</h1>
                             </IonLabel>
                         </IonListHeader>
-                        {data!.recipe_ingedients?.map((ingredient:any) => {
+                        {data!.recipe_ingredients?.map((ingredient:any) => {
                             return (
                                 <IonItem>
                                     <IonText>{ingredient}</IonText>
