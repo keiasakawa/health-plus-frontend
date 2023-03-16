@@ -99,7 +99,6 @@ const RecommendationTab: React.FC = () => {
     image_url:'',
     meal_description:'',
   }]);
-  let emptyMessage = 'No Meals to Show!';
   const history = useHistory();
   useEffect(() => {
     (async () => {
@@ -111,18 +110,18 @@ const RecommendationTab: React.FC = () => {
         };
         const response = await instance.post('/meals/recommended', healthData, {headers});
         console.log(response.data);
-        if (response.data.length == 0) { 
-          emptyMessage = '';
-          setData([]);
-        }
-        else { 
-          setData(response.data);
-        }
+        if (response?.data?.length == 0) { response.data = []; }
+        setData(response.data); // So when post is empty, no cards show up instead of the default one
       } else {
         setData([]);
       }
     })();
   }, []);
+
+  const emptyMessage = (mealData: Array<object>) => {
+    if (mealData.length == 0) { return "No meals to show!"; }
+    return "";
+  };
 
   const redirect = (id: string) => {
     history.push({
@@ -137,7 +136,7 @@ const RecommendationTab: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <p>{emptyMessage}</p>
+          {emptyMessage(mealData)}
           <Header />
         </IonToolbar>
       </IonHeader>
