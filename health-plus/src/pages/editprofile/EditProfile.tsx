@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonSelect, IonSelectOption, IonRow, IonButton, IonCol, IonInput } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonSelect, IonSelectOption, IonRow, IonButton, IonCol, IonInput, useIonViewDidLeave } from '@ionic/react';
 import './EditProfile.css';
 import Header from '../../components/Header'
 import { useState, useEffect } from 'react';
@@ -35,7 +35,7 @@ const EditProfile: React.FC = () => {
       }
   }
 }
-
+  const [ saveStatus, setSaveStatus ] = useState(" ");
   const handleInfo = async() => {
     const infoData = {
       goal: goal,
@@ -50,6 +50,7 @@ const EditProfile: React.FC = () => {
       await instance.put('/users/info', infoData, {
         headers: headers
       });
+      setSaveStatus("Changes Saved!");
     }
     catch (err){
       if (err instanceof Error) {
@@ -62,6 +63,10 @@ const EditProfile: React.FC = () => {
     getInfo();
   }, []);
 
+  useIonViewDidLeave(() => {
+    setSaveStatus(" ");
+  });
+
   return (
     <IonPage>
       <IonHeader>
@@ -70,6 +75,13 @@ const EditProfile: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+      <div style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "15px"
+        }}>{saveStatus}
+      </div>
         <IonItem className="fitness-goal-component" lines="full">
             <IonLabel>Goal</IonLabel>
             <IonSelect value={goal} onIonChange={e => setGoal(e.detail.value)}>
