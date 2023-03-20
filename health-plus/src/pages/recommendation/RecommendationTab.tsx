@@ -22,7 +22,6 @@ import LoginFilter from '../../filter/LoginFilter';
 
 const types = [
   'HKQuantityTypeIdentifierHeight',
-  'HKQuantityTypeIdentifierBodyMass',
   'HKQuantityTypeIdentifierActiveEnergyBurned',
 ];
 const options: HealthKitOptions = {
@@ -55,11 +54,6 @@ const getHealthData = async () => {
   // Returns the health data needed from HealthKit to recommend a meal.
   const res = await requestAuthorization();
   if (res === false) { return; }
-  const weight = (await HealthKit.readWeight({
-    'requestWritePermission': false, // use if your app doesn't need to write
-    'unit': 'lb'
-  }))?.value;
-  console.log("Weight: ", weight || "Unknown Weight");
   const height = await HealthKit.readHeight({ "unit": "in" });
   const gender = await HealthKit.readGender();
   console.log("The Gender: ", gender);
@@ -76,14 +70,12 @@ const getHealthData = async () => {
     total_cal += calorie_obj?.quantity;
   }
   console.log({
-    weight: weight,
     gender: gender,
     dob: dob,
     total_cal: total_cal,
     height: height.value
   });
   return {
-    weight: weight,
     gender: gender,
     dob: dob,
     total_cal: total_cal,
