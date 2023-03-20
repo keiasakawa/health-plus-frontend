@@ -1,9 +1,26 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonSelect, IonSelectOption, IonRow, IonButton, IonCol, IonInput } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonSelect, IonSelectOption, IonRow, IonButton, IonCol, IonInput, useIonViewDidLeave } from '@ionic/react';
 import './EditProfile.css';
 import Header from '../../components/Header'
 import { useState, useEffect } from 'react';
 import {instance} from '../../utils'
 import LoginFilter from '../../filter/LoginFilter'
+
+function verifyData(weight: string, mealsPerDay: string): string {
+  // Verifies data and returns msg to be displaye, empty is successful.
+  if (mealsPerDay === "0") {
+    return "Cannot put 0 meals per day";
+  }
+  else if (mealsPerDay.includes(".")) {
+    return "Can only use whole numbers for meals per day";
+  }
+  else if (weight === "0") {
+    return "Cannot put 0 weight";
+  }
+  else if (weight.includes(".")) {
+    return "Can only use whole numbers for weight";
+  }
+  return "";
+}
 
 const EditProfile: React.FC = () => {
   const [goal, setGoal] = useState('');
@@ -35,7 +52,7 @@ const EditProfile: React.FC = () => {
       }
   }
 }
-
+  const [ saveStatus, setSaveStatus ] = useState(" ");
   const handleInfo = async() => {
     const infoData = {
       goal: goal,
@@ -46,10 +63,16 @@ const EditProfile: React.FC = () => {
     const headers = {
       Authorization: "Bearer " + localStorage.getItem("token")
     };
+    const dataStatus = verifyData(weight, mealsPerDay); 
+    if (dataStatus.length !== 0) {
+      setSaveStatus(dataStatus);
+      return;
+    }
     try {
       await instance.put('/users/info', infoData, {
         headers: headers
       });
+      setSaveStatus("Changes Saved!");
     }
     catch (err){
       if (err instanceof Error) {
@@ -62,6 +85,10 @@ const EditProfile: React.FC = () => {
     getInfo();
   }, []);
 
+  useIonViewDidLeave(() => {
+    setSaveStatus(" ");
+  });
+
   return (
     <IonPage>
       <IonHeader>
@@ -70,6 +97,13 @@ const EditProfile: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+      <div style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "15px"
+        }}>{saveStatus}
+      </div>
         <IonItem className="fitness-goal-component" lines="full">
             <IonLabel>Goal</IonLabel>
             <IonSelect value={goal} onIonChange={e => setGoal(e.detail.value)}>

@@ -27,6 +27,23 @@ import {
     }
   }
   
+function verifyData(weight: string, mealsPerDay: string): string {
+  // Verifies data and returns msg to be displaye, empty is successful.
+  if (mealsPerDay === "0") {
+    return "Cannot put 0 meals per day";
+  }
+  else if (mealsPerDay.includes(".")) {
+    return "Can only use whole numbers for meals per day";
+  }
+  else if (weight === "0") {
+    return "Cannot put 0 weight";
+  }
+  else if (weight.includes(".")) {
+    return "Can only use whole numbers for weight";
+  }
+  return "";
+}
+
   const InfoPage: React.FC = () => {
     useIonViewWillEnter(() => hideTabs())
 
@@ -35,6 +52,8 @@ import {
     const [disabled, setDisabled] = useState(true)
     const [weight, setWeight] = useState('');
     const [mealsPerDay, setMealsPerDay] = useState('');
+    const [status, setStatus] = useState('');
+
     
     const handleInfo = async() => 
     {
@@ -47,6 +66,11 @@ import {
       const headers = {
         Authorization: "Bearer " + localStorage.getItem("token")
       };
+      const dataStatus = verifyData(weight, mealsPerDay);
+      if (dataStatus.length !== 0) {
+        setStatus(dataStatus);
+        return;
+      }
       try {
         await instance.post('users/info', infoData, {
           headers: headers
@@ -74,6 +98,13 @@ import {
         </IonHeader>
         <IonContent fullscreen>
         <IonText class = "ion-text-center"><h1>Before we start, let's get some info!</h1></IonText>
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "15px"
+          }}>{status}
+          </div>
           <IonItem className="fitness-goal-component" lines="full">
             <IonLabel>What is your goal? (This can be changed at anytime)</IonLabel>
             <IonSelect onIonChange={e => setGoal(e.detail.value)}>
