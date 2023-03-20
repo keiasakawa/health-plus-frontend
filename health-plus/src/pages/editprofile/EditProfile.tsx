@@ -5,6 +5,23 @@ import { useState, useEffect } from 'react';
 import {instance} from '../../utils'
 import LoginFilter from '../../filter/LoginFilter'
 
+function verifyData(weight: string, mealsPerDay: string): string {
+  // Verifies data and returns msg to be displaye, empty is successful.
+  if (mealsPerDay === "0") {
+    return "Cannot put 0 meals per day";
+  }
+  else if (mealsPerDay.includes(".")) {
+    return "Can only use whole numbers for meals per day";
+  }
+  else if (weight === "0") {
+    return "Cannot put 0 weight";
+  }
+  else if (weight.includes(".")) {
+    return "Can only use whole numbers for weight";
+  }
+  return "";
+}
+
 const EditProfile: React.FC = () => {
   const [goal, setGoal] = useState('');
   const [allergies, setAllergies] = useState([]);
@@ -46,6 +63,11 @@ const EditProfile: React.FC = () => {
     const headers = {
       Authorization: "Bearer " + localStorage.getItem("token")
     };
+    const dataStatus = verifyData(weight, mealsPerDay); 
+    if (dataStatus.length !== 0) {
+      setSaveStatus(dataStatus);
+      return;
+    }
     try {
       await instance.put('/users/info', infoData, {
         headers: headers

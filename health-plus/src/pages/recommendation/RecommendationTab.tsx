@@ -13,7 +13,6 @@ import {
 } from '@ionic/react';
 import ExploreContainer from '../../components/ExploreContainer';
 import './RecommendationTab.css';
-import { dummyMeal, recommendedMeal } from './heuristics';
 import Header from '../../components/Header';
 import { HealthKit, HealthKitOptions } from '@awesome-cordova-plugins/health-kit';
 import { useEffect, useState } from 'react';
@@ -25,7 +24,6 @@ const types = [
   'HKQuantityTypeIdentifierHeight',
   'HKQuantityTypeIdentifierBodyMass',
   'HKQuantityTypeIdentifierActiveEnergyBurned',
-  'HKQuantityTypeIdentifierBasalEnergyBurned'
 ];
 const options: HealthKitOptions = {
   readTypes: types,
@@ -73,15 +71,8 @@ const getHealthData = async () => {
     'sampleType': 'HKQuantityTypeIdentifierActiveEnergyBurned',
     'unit': 'Cal'
   });
-  const restCal = await HealthKit.querySampleType({
-    'startDate': new Date(new Date().getTime() - (24 * 60 * 60 * 1000)),
-    'endDate': new Date(), // now
-    'sampleType': 'HKQuantityTypeIdentifierBasalEnergyBurned',
-    'unit': 'Cal'
-  });
-  const allCalArr = activeCal.concat(restCal);
   let total_cal = 0;
-  for (const calorie_obj of allCalArr) {
+  for (const calorie_obj of activeCal) {
     total_cal += calorie_obj?.quantity;
   }
   console.log({
